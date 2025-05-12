@@ -1,6 +1,13 @@
 import pandas as pd
 
 df = pd.read_csv("daten/weatherAUS.csv")
+# df = pd.read_csv("machine_learning_schulung_202505/daten/weatherAUS.csv")
+
+# df["Date"] = pd.to_datetime(df["Date"])
+# df["month"] = df["Date"].dt.month
+# df_monate = pd.get_dummies(df["month"])
+# df = pd.concat([df, df_monate], axis=1)
+# df.columns = df.columns.astype(str)
 
 df = df.drop(columns=["WindGustDir", "WindDir9am", "WindDir3pm", "Location", "Date", "RISK_MM"])
 
