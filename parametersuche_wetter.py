@@ -1,24 +1,40 @@
 from datenaufbereitung_wetter import x_train, x_vali, y_train, y_vali
-# from machine_learning_schulung_202505.datenaufbereitung_wetter import x_train, x_vali, y_train, y_vali
-from sklearn.tree import DecisionTreeClassifier
-import pandas as pd
-from sklearn.metrics import precision_score, recall_score, accuracy_score
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neural_network import MLPClassifier
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
-from sklearn.linear_model import PassiveAggressiveClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.metrics import precision_score, recall_score, accuracy_score
+import pandas as pd
+from scipy.stats import randint as sp_randint
 
-###### Classifier #####
-PARAMS = {"n_estimators": 120,
-          "max_depth": 4,
-          "min_samples_split": 400,
-          "min_samples_leaf": 200}
+# Define the parameter grid
+# param_grid = {
+#     'n_estimators': [50, 100],
+#     'max_depth': [3, 5, 7]
+# }
 
-cls = GradientBoostingClassifier(**PARAMS)
-cls.fit(x_train, y_train)
+param_dist = {"max_depth": sp_randint(3, 8),
+              "n_estimators": sp_randint(80, 120)}
 
+# Initialize the classifier
+cls = GradientBoostingClassifier()
+
+random_search = RandomizedSearchCV(estimator=cls,
+                                   param_distributions=param_dist,
+                                   n_iter=2,  # Number of parameter settings to sample
+                                   scoring='accuracy',
+                                   cv=2,
+                                   random_state=42,
+                                   verbose=2)
+random_search.fit(x_train, y_train)
+cls = random_search.best_estimator_
+
+# Initialize GridSearchCV
+# grid_search = GridSearchCV(estimator=cls, param_grid=param_grid,
+#                            scoring='accuracy', n_jobs=-1, verbose=2)
+# grid_search.fit(x_train, y_train)
+#
+# cls = grid_search.best_estimator_
 
 ###### Prediction on Train Set #####
 y_train_pred = cls.predict(x_train)
