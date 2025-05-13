@@ -1,4 +1,4 @@
-from datenaufbereitung_wetter import x_train, x_vali, y_train, y_vali
+from datenaufbereitung_wetter import x_train, x_vali, y_train, y_vali, x_test, y_test
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import GridSearchCV
@@ -68,6 +68,22 @@ overfitting_recall = recall_train - recall_vali
 print("Overfitting Accuracy: ", overfitting)
 print("Overfitting Recall: ", overfitting_recall)
 
+
+##### Prediction on Test Set #####
+y_test_pred = cls.predict(x_test)
+
+df_test = pd.DataFrame({'actual': y_test,
+                'prediction': y_test_pred})
+
+accuracy_test = accuracy_score(df_test["actual"], df_test["prediction"])
+precision_test = precision_score(df_test["actual"], df_test["prediction"])
+recall_test = recall_score(df_test["actual"], df_test["prediction"])
+print("Accuracy auf Test: ", accuracy_test)
+print("Precision auf Test: ", precision_test)
+print("Recall auf Test: ", recall_test)
+
+print("=" * 50)
+print("Information Leakage:", accuracy_vali - accuracy_test)
 
 ###### Feature Importances ######
 # df_feature_importance = pd.DataFrame({"score": cls.feature_importances_,
