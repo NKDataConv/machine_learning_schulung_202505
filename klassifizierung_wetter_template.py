@@ -4,10 +4,20 @@ from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 from sklearn.metrics import precision_score, recall_score, accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.linear_model import PassiveAggressiveClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 ###### Classifier #####
-cls = KNeighborsClassifier()
+PARAMS = {"n_estimators": 100,
+          "learning_rate": 0.15,
+          "max_depth": 3}
+
+cls = GradientBoostingClassifier(**PARAMS)
 cls.fit(x_train, y_train)
+
 
 ###### Prediction on Train Set #####
 y_train_pred = cls.predict(x_train)
@@ -40,3 +50,11 @@ overfitting = accuracy_train - accuracy_vali
 overfitting_recall = recall_train - recall_vali
 print("Overfitting Accuracy: ", overfitting)
 print("Overfitting Recall: ", overfitting_recall)
+
+
+###### Feature Importances ######
+# df_feature_importance = pd.DataFrame({"score": cls.feature_importances_,
+#                                       "feature": x_train.columns})
+#
+# df_feature_importance.sort_values(by="score", ascending=False)
+# print(df_feature_importance)
