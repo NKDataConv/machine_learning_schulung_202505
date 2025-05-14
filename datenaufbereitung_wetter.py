@@ -9,7 +9,7 @@ df = pd.read_csv("daten/weatherAUS.csv")
 # df = pd.concat([df, df_monate], axis=1)
 # df.columns = df.columns.astype(str)
 
-df = df.drop(columns=["WindGustDir", "WindDir9am", "WindDir3pm", "Location", "Date", "RISK_MM"])
+df = df.drop(columns=["WindGustDir", "WindDir9am", "WindDir3pm", "Location", "Date"])
 
 df = df.dropna()
 
@@ -26,9 +26,10 @@ df["RainTomorrow"] = le.transform(df["RainTomorrow"])
 df["RainToday"] = le.transform(df["RainToday"])
 
 y = df["RainTomorrow"]
-x = df.drop(columns=["RainTomorrow"])
+x = df.drop(columns=["RainTomorrow", "RISK_MM"])
+y_risk_mm = df["RISK_MM"]
 
 from sklearn.model_selection import train_test_split
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.4, random_state=42, stratify=y)
-x_vali, x_test, y_vali, y_test = train_test_split(x_test, y_test, test_size=0.25, random_state=42, stratify=y_test)
+x_train, x_test, y_train, y_test, y_risk_mm_train, y_risk_mm_test = train_test_split(x, y, y_risk_mm, test_size=0.4, random_state=42, stratify=y)
+x_vali, x_test, y_vali, y_test, y_risk_mm_vali, y_risk_mm_test = train_test_split(x_test, y_test, y_risk_mm_test, test_size=0.25, random_state=42, stratify=y_test)

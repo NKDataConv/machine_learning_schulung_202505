@@ -3,14 +3,14 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 import pandas as pd
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
 PARAMS_GRID = {"max_depth": [2, 3, 4, 5, 6],
                "min_samples_split": [3, 4, 5, 6, 7, 8],
                 "min_samples_leaf": [3, 5, 7, 9]}
 
 cls = DecisionTreeClassifier()
-cv = GridSearchCV(cls, param_grid=PARAMS_GRID, cv=3, scoring="accuracy", verbose=2, n_jobs=-1)
+cv = RandomizedSearchCV(cls, param_distributions=PARAMS_GRID, cv=3, scoring="accuracy", verbose=2, n_jobs=-1, n_iter=100)
 cv.fit(x_train, y_train)
 
 cls = cv.best_estimator_
