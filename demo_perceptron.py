@@ -24,7 +24,7 @@ class Perceptron:
         :param x: Eingabewert
         :return: 0 oder 1
         """
-        return 1 if x >= 0 else 0
+        return x if x >= 0 else 0
 
     def predict(self, inputs):
         """

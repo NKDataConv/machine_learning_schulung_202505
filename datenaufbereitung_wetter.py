@@ -29,6 +29,11 @@ y = df["RainTomorrow"]
 x = df.drop(columns=["RainTomorrow", "RISK_MM"])
 y_risk_mm = df["RISK_MM"]
 
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+scaler.fit(x)
+x = scaler.transform(x)
+
 from sklearn.model_selection import train_test_split
 
 x_train, x_test, y_train, y_test, y_risk_mm_train, y_risk_mm_test = train_test_split(x, y, y_risk_mm, test_size=0.4, random_state=42, stratify=y)

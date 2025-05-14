@@ -9,14 +9,16 @@ from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 from sklearn.linear_model import PassiveAggressiveClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.neural_network import MLPClassifier, MLPRegressor
+
 
 ###### Classifier #####
-PARAMS = {"n_estimators": 120,
-          "max_depth": 4,
-          "min_samples_split": 400,
-          "min_samples_leaf": 200}
+# PARAMS = {"n_estimators": 120,
+#           "max_depth": 4,
+#           "min_samples_split": 400,
+#           "min_samples_leaf": 200}
 
-cls = GradientBoostingClassifier(**PARAMS)
+cls = MLPClassifier(hidden_layer_sizes=(50, 20, 10), learning_rate_init=0.002)
 cls.fit(x_train, y_train)
 
 

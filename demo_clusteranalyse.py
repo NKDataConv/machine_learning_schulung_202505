@@ -36,11 +36,15 @@ X_scaled = scaler.fit_transform(X)  # 4D-Daten für das Clustering
 #  - n_clusters = 3 (da wir wissen, dass Iris theoretisch 3 Arten hat)
 #  - n_init = 10 (KMeans wird 10-mal neu gestartet; das beste Ergebnis wird gewählt)
 #  - random_state = 42 (zur Reproduzierbarkeit)
-kmeans = KMeans(n_clusters=3, n_init=10, random_state=42)
-kmeans.fit(X_scaled)
+from sklearn.cluster import MeanShift
+ms = MeanShift()
+ms.fit(X_scaled)
+# kmeans = KMeans(n_clusters=3, n_init=10, random_state=42)
+# kmeans.fit(X_scaled)
 
 # Die Cluster-Zugehörigkeiten für jeden Datenpunkt
-cluster_labels = kmeans.labels_
+cluster_labels = ms.labels_
+# cluster_labels = kmeans.labels_
 
 
 # ================================
@@ -63,8 +67,11 @@ print("Silhouette Score:", sil_score)
 
 # Wir definieren hier zur Übersicht Feature-Namen:
 feature_names = iris.feature_names  # ["sepal length (cm)", "sepal width (cm)", ...]
-feature_x = 0  # Index für 'Sepal Length'
-feature_y = 1  # Index für 'Sepal Width'
+feature_x = 2  # Index für 'Sepal Length'
+feature_y = 3  # Index für 'Sepal Width'
+
+hover_text = [f"Col1: {x[0]:.2f}<br>Col2: {x[1]:.2f}<br>Col3: {x[2]:.2f}<br>Col4: {x[3]:.2f}" for x in X]
+
 
 # Plot 1: KMeans-Cluster auf Original-Features (Index 0 und 1)
 fig1 = px.scatter(
@@ -76,7 +83,8 @@ fig1 = px.scatter(
         "x": feature_names[feature_x],
         "y": feature_names[feature_y],
         "color": "KMeans Cluster"
-    }
+    },
+    hover_name = hover_text
 )
 fig1.update_layout(template='plotly_white')
 fig1.show()
@@ -91,7 +99,8 @@ fig2 = px.scatter(
         "x": feature_names[feature_x],
         "y": feature_names[feature_y],
         "color": "Wahre Klasse"
-    }
+    },
+    hover_name = hover_text
 )
 fig2.update_layout(template='plotly_white')
 fig2.show()
